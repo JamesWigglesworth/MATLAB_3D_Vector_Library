@@ -1,4 +1,6 @@
 # MATLAB_3D_Vector_Library Documentation
+James Wigglesworth  
+
 I did a lot of 3D vector math for my Master's Thesis. 
 This is a collection of the functions I used most.
 I tried to keep the names as descriptive as possible.
@@ -9,7 +11,7 @@ Please let me know if you find any bugs and feel free to add your own functions!
 
 
 v_angle(vector_1, vector_2)
-  Calculates the smallest angle between to 3D vectors
+  Calculates the smallest angle between two 3D vectors
   Example 1:
     v_angle([1, 0, 0], [0, 0, 1]) 
     returns 90
@@ -90,7 +92,7 @@ v_distance_point_to_point(point_1, point_2)
     returns [0, 0, 1]
 
 
-[center_point_3D, normal, radius, plot_points_3D, points_2D, center_point_2D, plot_points_2D] = v_fit_circle_3D()
+[center_point_3D, normal, radius, plot_points_3D, points_2D, center_point_2D, plot_points_2D] = v_fit_circle_3D(points)
   Calculates the circle of best fit from XYZ data
   This is done by first fitting a plane to the data, projecting the points onto the plane,
   transforming the plane from 3D to 2D, then fitting a 2D circle to the 2D points
@@ -206,11 +208,77 @@ v_normalize(vector)
       point: [1, 2, 5]
 
 
-v_plot_plane()
-v_plot_pose()
-v_project_vector_onto_plane()
-v_rotate()
-v_rotate_DCM()
-v_signed_angle()
+v_plot_plane(plane_norm, plane_V, plane_point, dim, face_color, edge_color)
+  This will plot a rectangular plane from the outputs of v_plane_fit
+  dim is 1x2 that determines the size of the rectangle
+  face_color and edge_color control the plane's color
+  Example 1:
+    input_points = [0, 0, 0; 1, 2, 3; 1, -2, 3]
+    [plane_norm, plane_V, plane_point] = v_plane_fit(input_points)
+    figure(1)
+    cla
+    hold on
+    v_plot_plane(plane_norm', plane_V', plane_point, [3 3])
+    plot3(input_points(:,1), input_points(:,2), input_points(:,3),'k*')
+
+    
+
+
+v_plot_pose(pose, vector_size)
+  plots a 3D pose onto the current figure
+  the lengths of the pose's vectors are set with vector_size
+  pose defaults to be on the origin aligned with the major axes (aka an identiy matrix)
+  vector_size defaults to 1
+  no return value
+  X axis = red
+  Y axis = green
+  Z axis = blue
+  hold must be set to 'on' for the figure
+  Example 1:
+    figure(1)
+    cla
+    hold on
+    grid on
+    set(gca, 'DataAspectRatio', [1 1 1])
+    v_plot_pose()
+    v_plot_pose(v_make_pose([1, 2, 3], [0, 0, 30]), 2)
+
+    
+
+v_project_vector_onto_plane(vectors, plane)
+  projects the vector onto the plane
+  multiple vectors can be passed in
+  Example 1:
+    v_project_vector_onto_plane([1, 1, 0], [1, 0, 0])
+    returns: [0, 1, 0]
+
+
+v_rotate(vectors, plane, theta)
+  Rotates a vector about the axis, rot_axis, by an angle in degrees, theta
+  An array of vectors of length n can also be passed in
+  Example 1:
+    v_rotate([1, 0, 0], [0, 0, 1], 45)
+    returns: [0.7071, 0.7071, 0]
+
+
+v_rotate_DCM( DCM, rot_axis, theta)
+  Rotates a DCM about rot_axis by angle in degrees, theta
+  rot_axis can be a vector or the following strings: 'X', 'Y', 'Z', 'X''', 'Y''', 'Z'''
+  'X' specifies rotation about the global X axis
+  'X''' specifies rotation about the DCM's X axis
+  Example 1:
+    v_rotate_DCM( eye(3), 'Z', 45)
+    returns: [0.707, -0.707, 0; 0.707, 0.707, 0; 0, 0, 1]
+ 
+v_signed_angle(vector_1, vector_2, plane)
+  Calculates the angle between two 3D vectors
+  If facing the front of the plane counter-clockwise is positive
+  The cross product of vector_1 and vector_2 must equal the positive or negative of the plane
+  Example 1:
+    v_singed_angle([1, 0, 0], [0, 0, 1], [0, 1, 0]) 
+    returns -90
+  Example 2:
+    v_singed_angle([1, 0, 0], [0, 0, -1], [0, 1, 0]) 
+    returns 90
   
     
