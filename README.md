@@ -2,6 +2,8 @@
 I did a lot of 3D vector math for my Master's Thesis.  
 This is a collection of the functions I used most.  
 I tried to keep the names as descriptive as possible.  
+You can download a zip file of the latest release here:  
+https://github.com/JamesWigglesworth/MATLAB_3D_Vector_Library/releases/  
 
 Please let me know if you find any bugs and feel free to add your own functions!  
 
